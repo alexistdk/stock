@@ -1,4 +1,5 @@
 from Producto import Producto
+from Carrito import Carrito
 
 def menu():
     print("1. Agregar productos\n"
@@ -6,14 +7,6 @@ def menu():
           "3. Consultar precio\n"
           "4. Buscar producto\n"
           "5. Cobrar\n")
-          # vender: permite agregar productos, eliminarlos y 
-          #         actualizar el stock una vez realizada la venta
-          # actualizar precios
-          # generar avisos de pagos a proveedores
-          # generar una factura en pdf (reportlab)
-          # crear una caja para llevar el control de la plata que entra y que sale 
-          # pagar a proveedores
-          # retirar plata de la caja
     opcion = int(input("Seleccione la opcion: "))
     seleccionarOpcion(opcion)
 
@@ -29,15 +22,8 @@ def seleccionarOpcion(opcion):
         consultarStock()
     elif opcion == 5:
         cobrar()
-    elif opcion == 6:
-        buscarID()
     else:
-        menu()
-
-def buscarID():
-    codigoBarra = int(input("Codigo: "))
-    Producto.buscarIDporCodBarra(codigoBarra)
-    menu()
+        print(Producto.listaCodBarra)
 
 def agregarProducto(): #opcion 1
     Producto.ingresaDatos() #llama a la funcion ingresaDatos del objeto Producto
@@ -72,7 +58,8 @@ def cobrar(): #opcion 5
     codigoBarra = int(input("Código de barra: "))
     while codigoBarra != 0:
         cantidad = int(input("Cantidad: "))
-        Producto.venta(codigoBarra, cantidad)
+        Carrito.agregarItem(codigoBarra, cantidad)
         codigoBarra = int(input("Código de barra: "))
+    Carrito.imprimirCarrito()
 
 menu()
