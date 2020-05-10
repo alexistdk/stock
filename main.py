@@ -1,5 +1,6 @@
 from Producto import Producto
 from Carrito import Carrito
+import os
 
 def menu():
     print("1. Agregar productos\n"
@@ -15,10 +16,12 @@ def seleccionarOpcion(opcion):
         agregarProducto()
     elif opcion == 2:
         Producto.imprimirProductos()
+        os.system('clear')
         menu()
     elif opcion == 3:
         consultarPrecio()
     elif opcion == 4:
+        os.system('clear')
         consultarStock()
     elif opcion == 5:
         cobrar()
@@ -29,29 +32,35 @@ def agregarProducto(): #opcion 1
     Producto.ingresaDatos() #llama a la funcion ingresaDatos del objeto Producto
     agregarOtroProducto() #llama a la funcion de abajo para agregar más productos
 
-def agregarOtroProducto():
+def agregarOtroProducto(): #opcion 2
     respuesta = input("¿Desea agregar otro producto? S/N: ")
     if respuesta.casefold() == "s":
         agregarProducto()
     elif respuesta.casefold() == "n":
+        os.system('clear')
         menu()
     else:
         respuestaInvalida()
 
-def respuestaInvalida():
+def respuestaInvalida(): #opcion 2
     print("Respuesta inválida")
     agregarOtroProducto()
 
 def consultarPrecio(): #opcion 3
+    os.system('clear')
     codigo = int(input("Código de barra: "))
     precio = Producto.consultarPrecio(codigo)
     print("Precio: " + str(precio))
+    input("\nPresione cualquier tecla...")
+    os.system('clear')
     menu()    
 
 def consultarStock(): #opcion 4
         producto = input("Nombre del producto: ")
         cantidadEnStock = Producto.consultarStock(producto)
         print("Cantidad en stock: " + str(cantidadEnStock))
+        input("\nPresione cualquier tecla...")
+        os.system('clear')
         menu()
 
 def cobrar(): #opcion 5
@@ -61,5 +70,8 @@ def cobrar(): #opcion 5
         Carrito.agregarItem(codigoBarra, cantidad)
         codigoBarra = int(input("Código de barra: "))
     Carrito.imprimirCarrito()
+    input("\nPresione cualquier tecla...")
+    os.system('clear')
+    menu()
 
 menu()
