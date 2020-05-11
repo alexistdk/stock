@@ -70,6 +70,7 @@ def cobrar(): #opcion 5
         Carrito.agregarItem(codigoBarra, cantidad)
         codigoBarra = int(input("Código de barra: "))
     Carrito.imprimirCarrito()
+    Carrito.precioTotal()
     input("\nPresione cualquier tecla...")
     os.system('clear')
     menu()

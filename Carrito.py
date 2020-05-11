@@ -27,3 +27,10 @@ class Carrito():
     @classmethod
     def imprimirCarrito(self):
         print(*self.listaCarrito, sep="\n")
+
+    @classmethod
+    def precioTotal(self):
+        precio = 0
+        for i in range(len(self.listaCarrito)):
+            precio += self.listaCarrito[i]['precio'] * self.listaCarrito[i]['cantidad']
+        print("Total de la compra: " + str(precio))
