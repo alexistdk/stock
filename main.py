@@ -3,11 +3,13 @@ from Carrito import Carrito
 import os
 
 def menu():
+    os.system('clear')
     print("1. Agregar productos\n"
           "2. Consultar stock\n"
           "3. Consultar precio\n"
           "4. Buscar producto\n"
-          "5. Cobrar\n")
+          "5. Cobrar\n"
+          "6. Actualizar precios\n")
     opcion = int(input("Seleccione la opcion: "))
     seleccionarOpcion(opcion)
 
@@ -25,8 +27,10 @@ def seleccionarOpcion(opcion):
         consultarStock()
     elif opcion == 5:
         cobrar()
+    elif opcion == 6:
+        actualizarPrecio()
     else:
-        print(Producto.listaCodBarra)
+        menu()
 
 def agregarProducto(): #opcion 1
     Producto.ingresaDatos() #llama a la funcion ingresaDatos del objeto Producto
@@ -41,10 +45,9 @@ def agregarOtroProducto(): #opcion 2
         menu()
     else:
         respuestaInvalida()
+        agregarOtroProducto()
 
-def respuestaInvalida(): #opcion 2
-    print("Respuesta inválida")
-    agregarOtroProducto()
+def respuestaInvalida(): print("Respuesta inválida")
 
 def consultarPrecio(): #opcion 3
     os.system('clear')
@@ -63,16 +66,49 @@ def consultarStock(): #opcion 4
         os.system('clear')
         menu()
 
+def confirmarEliminarProducto(): #opcion 5
+    confirmar = input("¿Desea eliminar algún producto?: ")
+    if confirmar.casefold() == 's':
+        codigoBarra = int(input("Código de barra: "))
+        while codigoBarra != 0:
+            cantidad = int(input("Cantidad: "))
+            os.system('clear')
+            Carrito.eliminarItem(codigoBarra, cantidad)
+            confirmarEliminarProducto()
+    elif confirmar.casefold() == 'n': 
+        cierraCompra()
+    else:
+        respuestaInvalida()
+        confirmarEliminarProducto()
+
+def cierraCompra(): #opcion 5
+    Carrito.imprimirCarrito()
+    Carrito.precioTotal()
+    Carrito.actualizaStock()
+    input("\nPresione cualquier tecla...")
+    del Carrito.listaBackUp[:]
+    del Carrito.listaCarrito[:]
+    os.system('clear')
+    menu()
+
 def cobrar(): #opcion 5
-    codigoBarra = int(input("Código de barra: "))
+    os.system('clear')
+    print("Cobrar\n")
+    codigoBarra = int(input("Código de barra: ")) 
     while codigoBarra != 0:
         cantidad = int(input("Cantidad: "))
         Carrito.agregarItem(codigoBarra, cantidad)
+        os.system('clear')
         codigoBarra = int(input("Código de barra: "))
-    Carrito.imprimirCarrito()
-    Carrito.precioTotal()
-    input("\nPresione cualquier tecla...")
     os.system('clear')
+    confirmarEliminarProducto()
+
+def actualizarPrecio(): #opcion 6
+    os.system('clear')
+    print("Actualización de precio\n")
+    codBarra = int(input("Código de barra: "))
+    precio = int(input("Precio nuevo: "))
+    Producto.actualizacionDePrecio(codBarra, precio)
     menu()
 
 menu()
