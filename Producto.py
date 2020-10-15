@@ -1,59 +1,64 @@
-import os
-import uuid
+from os import system
+
+
 class Producto:
 
-    listaProductos = []
+    lista_productos = []
 
-    nombre = ""
-    precio = 0
-    cantidad = 0
-
-    def __init__(self, codBarra, nombre, precio, cantidad):
-        self.codBarra = codBarra
-        self.nombre = nombre
+    def __init__(self, cod_barra, precio, cantidad):
+        self.cod_barra = cod_barra
         self.precio = precio
         self.cantidad = cantidad
 
-    @staticmethod
-    def ingresaDatos():
-        os.system('clear')
-        codBarra = int(input("Código de barra: ")) #ingresa el codigo de barras
-        nombre = input("Nombre: ") #ingresa el nombre
-        precio = int(input("Precio: ")) #ingresa el precio
-        cantidad = int(input("Cantidad: ")) #ingresa la cantidad
-        instancia = str(uuid.uuid4)
-        instancia = Producto(codBarra, nombre, precio, cantidad) #el codigo de barra se usa para instarciar el producto
-        Producto.listaProductos.append(instancia.__dict__) #los atributos y sus valores son guardados en una lista
-        os.system('clear')
-    
     @classmethod
-    def imprimirProductos(self):
-        os.system('clear')
-        print(*self.listaProductos, sep="\n")
-        input("\nPresione cualquier tecla...")
+    def ingresa_datos(cls):
+        nombre = input("Nombre del producto: ")
+        cod_barra = int(input("Código de barra: "))
+        precio = float(input("Precio: "))
+        cantidad = int(input("Cantidad: "))
+        if cls.no_existe_producto:
+            cls.crea_producto(nombre, cod_barra, precio, cantidad)
+        system('clear')
+    pass
 
     @classmethod
-    def getProducto(self, i): return self.listaProductos[i]
+    def crea_producto(cls, nombre_producto, cod_barra, precio, cantidad):
+        nombre_producto = Producto(cod_barra, precio, cantidad)
+        cls.lista_productos.append(nombre_producto.__dict__)
+        return nombre_producto
 
     @classmethod
-    def consultarStock(cls, nombreProducto):
-        for i in range(len(Producto.listaProductos)): #recorre la lista de productos
-            if Producto.listaProductos[i]['nombre'] == nombreProducto: #si encuentra el nombre del producto
-                return Producto.listaProductos[i]['cantidad'] #devuelve el stock
-    
-    @classmethod
-    def consultarPrecio(self, codBarra): #consulta el precio de un producto
-        for i in range(len(self.listaProductos)): #recorre la lista de productos
-            if self.listaProductos[i]['codBarra'] == codBarra: #si un codigo de barra coincide con el pasado
-                return Producto.listaProductos[i]['precio'] #retorna el precio del producto con dicho codigo de barra
+    def listar_productos(cls):
+        system('clear')
+        return cls.lista_productos
 
     @classmethod
-    def indiceCodBarra(self, codBarra):
-        for i in range(len(self.listaProductos)): #recorre la lista de productos
-            if self.listaProductos[i]['codBarra'] == codBarra: #si un codigo de barra coincide con el pasado
-                return i #retorna el indice del producto
+    def consultar_stock_producto(cls, cod_barra):
+        i = cls.indice_cod_barra(cod_barra)
+        return cls.lista_productos[i]['cantidad']
 
     @classmethod
-    def actualizacionDePrecio(self, codBarra, precio):
-        i = self.indiceCodBarra(codBarra)
-        self.listaProductos[i]['precio'] = precio
+    def consultar_precio(cls, cod_barra):
+        i = cls.indice_cod_barra(cod_barra)
+        return cls.lista_productos[i]['precio']
+
+    @classmethod
+    def indice_cod_barra(cls, cod_barra):
+        for i in range(len(cls.lista_productos)):
+            if cls.lista_productos[i]['cod_barra'] == cod_barra:
+                return i
+
+    @classmethod
+    def actualizar_precio(cls, cod_barra, precio_nuevo):
+        i = cls.indice_cod_barra(cod_barra)
+        cls.lista_productos[i]['precio'] = precio_nuevo
+    pass
+
+    @classmethod
+    def no_existe_producto(cls, cod_barra):
+        if cls.indice_cod_barra(cod_barra) is None:
+            return True
+
+    @classmethod
+    def imprimir_productos(cls):
+        print(*cls.lista_productos, sep="\n")
